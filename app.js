@@ -1,3 +1,5 @@
+import { ppid } from "process";
+
 export default function appSrc(express, bodyParser, puppeteer) {
   const app = express();
 
@@ -17,17 +19,17 @@ export default function appSrc(express, bodyParser, puppeteer) {
 
   app.get('/test/', async (req, res) => {
     const URL = req.query.URL || req.body.URL;
-    
-    const response = await fetch(URL);
-    if (response.ok) {
-      const inp = document.getElementById('inp');
-      const btn = document.getElementById('bt');
 
-      btn.addEventListener('click', async () => {
-        const inpVAlue = inp.value;
-        res.send(inpVAlue);
-      });
-    } else console.log('ERROR');
+    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+    const page = await browser.newPage();
+    await page.goto(URL);
+    await page.waitForSelector('#inp');
+    await page.waitForSelector('#bt');
+    await page.click('#bt');
+    const inpValue = await page.$eval('#inp', inp => inp.value);
+    browser.close();
+
+    res.send(inpValue);
   });
 
   app.all('*', (req, res) => {
