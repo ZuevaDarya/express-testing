@@ -27,9 +27,8 @@ export default function appSrc(express, bodyParser, puppeteer) {
     await page.waitForSelector('#bt');
     await page.click('#bt');
     const inpValue = await page.$eval('#inp', inp => inp.value);
-    browser.close();
-
     res.send(inpValue);
+    browser.close();
   });
 
   app.all('*', (req, res) => {
