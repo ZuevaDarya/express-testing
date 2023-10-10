@@ -1,4 +1,3 @@
-import { ppid } from "process";
 
 export default function appSrc(express, bodyParser, puppeteer) {
   const app = express();
@@ -20,15 +19,17 @@ export default function appSrc(express, bodyParser, puppeteer) {
   app.get('/test/', async (req, res) => {
     const URL = req.query.URL || req.body.URL;
 
-    const browser = await puppeteer.launch({ executablePath: '/node_modules/chromium', headless: 'new', args: ['--no-sandbox'] });
+    const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
     const page = await browser.newPage();
     await page.goto(URL);
     await page.waitForSelector('#inp');
-    await page.waitForSelector('#bt');
+    await page.waitForSelector('#bt')
     await page.click('#bt');
     const inpValue = await page.$eval('#inp', el => el.value);
     res.send(inpValue);
-    browser.close();
+    await browser.close();
+
+  
   });
 
   app.all('*', (req, res) => {
