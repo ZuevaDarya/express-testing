@@ -13,7 +13,7 @@ export default function appSrc(express, bodyParser, puppeteer) {
   });
 
   app.get('/login/', (req, res) => {
-    res.send('zdarya');
+    res.send('toropov85');
   });
 
   app.get('/test/', async (req, res) => {
@@ -33,7 +33,7 @@ export default function appSrc(express, bodyParser, puppeteer) {
   });
 
   app.all('*', (req, res) => {
-    res.send('zdarya');
+    res.send('toropov85');
   });
 
   return app;
